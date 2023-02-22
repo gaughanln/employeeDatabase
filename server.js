@@ -1,15 +1,5 @@
-//ran npm install but there's no package.json - Do I add this? How?
-
 const inquirer = require('inquirer');
-const express = require('express');
 const mysql = require('mysql2');
-
-const PORT = process.env.PORT || 3001;
-const app = express();
-
-// middleware
-app.use(express.urlencoded({ extended: false }));
-app.use(express.json());
 
 //making the connection to the sql database
 const db = mysql.createConnection(
@@ -40,25 +30,25 @@ const firstPrompt = [
 const start = async () => {
   const answer = await inquirer.prompt(firstPrompt);
 
-  if (answer.list === "View all departments") {
+  if (answer.start === "View all departments") {
     allDepartments();
 
-  } else if (answer.list === "View all roles") {
+  } else if (answer.start === "View all roles") {
     allRoles();
 
-  } else if (answer.list === "View all employees") {
+  } else if (answer.start === "View all employees") {
     allEmployees();
 
-  } else if (answer.list === "Add a department") {
+  } else if (answer.start === "Add a department") {
     addDepartment();
 
-  } else if (answer.list === "Add a role") {
+  } else if (answer.start === "Add a role") {
     addRole();
 
-  } else if (answer.list === "Add an employee") {
+  } else if (answer.start === "Add an employee") {
     addEmployee();
 
-  } else if (answer.list === "Update an employee role") {
+  } else if (answer.start === "Update an employee role") {
     // updateRole();
 console.log(role);
   } else {
@@ -75,7 +65,8 @@ function allDepartments() {
     if (err) {
       console.log(err)
     } else {
-      console.log(results)
+      console.table(results);
+      start();
     }
   });
 }
@@ -90,7 +81,8 @@ function allRoles() {
     if (err) {
       console.log(err)
     } else {
-      console.log(results)
+      console.table(results);
+      start();
     }
   });
 }
@@ -104,7 +96,8 @@ function allEmployees() {
     if (err) {
       console.log(err)
     } else {
-      console.log(results)
+      console.table(results);
+      start();
     }
   });
 }
@@ -124,7 +117,8 @@ async function addDepartment() {
     if (err) {
       console.log(err)
     } else {
-      console.log(`added department ${department.dept}`)
+      console.log(`added department ${department.dept}`);
+      start();
     }
   });
 }
@@ -143,7 +137,7 @@ const role = [
     choices: ["Marketing Manager", "Marketing Coordinator", "Sales Rep", "Sales lead", "Lawyer", "Accountant", "Customer Service Rep"]
   },
   {
-    type: "input",
+    type: "number",
     name: "salary",
     message:
       "What is the salary for this role?",
@@ -157,68 +151,111 @@ const role = [
   }
 ]
 
+// follow what we did from addEmployee function 
 async function addRole() {
   const newRole = await inquirer.prompt(role);
-db.query(`INSERT INTO role (name, salary, department) VALUES ("${newRole.role}", "${newRole.salary}", "${newRole.department}")`), (err, results) => {
+db.query(`INSERT INTO role (title, salary, department_id) VALUES (${newRole.role}, ${newRole.salary}, ${newRole.department})`, (err, results) => {
   if (err) {
     console.log(err)
   } else {
-    console.log(`Added ${newRole.role} to database`)
-  }}
+    console.log(`Added ${newRole.role} to database`);
+    start();
+  }})
 }
 
 // WHEN I choose to add an employee
 // THEN I am prompted to enter the employee’s first name, last name, role, and manager, and that employee is added to the database
+// let roleArray = [];
+// let managerArray = [];
 
-const employee = [
-  {
-    type: "input",
-    name: "firstName",
-    message:
-      "What is the employees first name?",
-  },
-  {
-    type: "input",
-    name: "lastName",
-    message:
-      "What is the employee's last name?",
-  },
-  {
-    type: "list",
-    name: "role",
-    message:
-      "What is this employee's role?",
-    choices: ["Marketing Manager", "Marketing Coordinator", "Sales Rep", "Sales lead", "Lawyer", "Accountant", "Customer Service Rep"]
-  },
-  {
-    type: "input",
-    name: "manager",
-    message:
-      "Who is the employee's manager?",
-  },
-]
+// let employee = [
+//   {
+//     type: "input",
+//     name: "firstName",
+//     message:
+//       "What is the employees first name?",
+//   },
+//   {
+//     type: "input",
+//     name: "lastName",
+//     message:
+//       "What is the employee's last name?",
+//   },
+//   {
+//     type: "list",
+//     name: "role",
+//     message:
+//       "What is this employee's role?",
+//     choices: roleArray,
+//   },
+//   {
+//     type: "list",
+//     name: "manager",
+//     message:
+//       "Who is the employee's manager?",
+//     choices: managerArray,
+//   },
+// ]
 
 async function addEmployee() {
-  const newEmployee = await inquirer.prompt(employee);
-db.query(`INSERT INTO employee (firstName, lastName, role, manager) VALUES ("${newEmployee.firstName}", "${newEmployee.lastName}", "${newEmployee.role}", "${newEmployee.manager}")`), (err, results) => {
+db.query(`SELECT * FROM role`, (err, results) => {
   if (err) {
     console.log(err)
-  } else {
-    console.log(`Added ${newEmployee.firstName} to database`)
-  }}
+  } 
+  let roleArray = results.map(role => ({name: role.title, value: role.id}));
+  db.query(`SELECT * FROM employee`, async (err, managerResults) => {
+    if (err) {
+      console.log(err)
+    } 
+    let managerArray = managerResults.map(manager => ({name: manager.first_name, value: manager.id}));
+
+    const newEmployee = await inquirer.prompt([
+      {
+        type: "input",
+        name: "firstName",
+        message:
+          "What is the employees first name?",
+      },
+      {
+        type: "input",
+        name: "lastName",
+        message:
+          "What is the employee's last name?",
+      },
+      {
+        type: "list",
+        name: "role",
+        message:
+          "What is this employee's role?",
+        choices: roleArray,
+      },
+      {
+        type: "list",
+        name: "manager",
+        message:
+          "Who is the employee's manager?",
+        choices: managerArray,
+      },
+    ]);
+
+    db.query(`INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ("${newEmployee.firstName}", "${newEmployee.lastName}", "${newEmployee.role}", "${newEmployee.manager}")`, (err, results) => {
+      if (err) {
+        console.log(err)
+      } else {
+        console.log(`Added ${newEmployee.firstName} to database`);
+        start();
+      }})
+
+  })
+})
 }
 // WHEN I choose to update an employee role
 // THEN I am prompted to select an employee to update and their new role and this information is updated in the database 
 // updateRole()
 
 // not sure how to do this one, AT ALL
+// same concept of addEmployee. but get role array and list of employees
 
 
 
-app.use((req, res) => {
-  res.status(404).end();
-});
-
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+start();
