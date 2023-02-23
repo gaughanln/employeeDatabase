@@ -49,7 +49,7 @@ const start = async () => {
     addEmployee();
 
   } else if (answer.start === "Update an employee role") {
-    // updateRole();
+    updateRole();
 console.log(role);
   } else {
 // need either an exit here or to rerun the function
@@ -138,7 +138,7 @@ async function addRole() {
  
   const newRole = await inquirer.prompt([
       {
-        type: "Input",
+        type: "input",
         name: "role",
         message:
           "What is the name of the new role?",
@@ -229,11 +229,35 @@ db.query(`SELECT * FROM role`, (err, results) => {
 // TODO
 // WHEN I choose to update an employee role
 // THEN I am prompted to select an employee to update and their new role and this information is updated in the database 
-// updateRole()
+async function updateRole() {
+  db.query(`SELECT * FROM role`, (err, results) => {
+    if (err) {
+      console.log(err)
+    } 
+    let roleArray = results.map(role => ({name: role.title, value: role.id}));
+  db.query(`SELECT * FROM employee`, async (err, res) => {
+    if (err) {
+      console.log(err)
+    } 
+  const newRole = await inquirer.prompt([
+    {
+      type: "list",
+      name: "role",
+      message:
+        "What is this employee's new role?",
+      choices: roleArray,
+    },
+  ])
+  db.query(`UPDATE employee SET title = ${newRole.role}`, (err, results) => {
+    if (err) {
+      console.log(err)   
+}})
+})
+})
+}
 
 // not sure how to do this one, AT ALL
 // same concept of addEmployee. but get role array and list of employees
-
 
 
 start();
