@@ -52,7 +52,8 @@ const start = async () => {
     updateRole();
 // console.log(role);
   } else {
-// need either an exit here or to rerun the function
+    // TODO
+// need  an exit function here
   }
 }
 
@@ -61,7 +62,7 @@ const start = async () => {
 // THEN I am presented with a formatted table showing department names and department ids
 
 function allDepartments() {
-  db.query('SELECT * FROM department', (err, results) => {
+  db.query('SELECT id, name AS department_name FROM department', (err, results) => {
     if (err) {
       console.log(err)
     } else {
@@ -77,7 +78,7 @@ function allDepartments() {
 // THEN I am presented with the job title, role id, the department that role belongs to, and the salary for that role
 
 function allRoles() {
-  db.query('SELECT * FROM role', (err, results) => {
+  db.query('SELECT role.title, role.id AS role_id, department.name as department, role.salary FROM role JOIN department ON role.department_id = department.id', (err, results) => {
     if (err) {
       console.log(err)
     } else {
@@ -92,7 +93,7 @@ function allRoles() {
 // THEN I am presented with a formatted table showing employee data, including employee ids, first names, last names, job titles, departments, salaries, and managers that the employees report to
 
 function allEmployees() {
-  db.query('SELECT * FROM employee', (err, results) => {
+  db.query('SELECT employee.id AS id, CONCAT(employee.first_name, " ", employee.last_name) AS employee_name, role.title, department.name AS department, role.salary, CONCAT(manager.first_name, " ", manager.last_name) AS manager_name FROM employee INNER JOIN role ON employee.role_id = role.id INNER JOIN department ON role.department_id = department.id LEFT JOIN employee manager ON employee.manager_id = manager.id;', (err, results) => {
     if (err) {
       console.log(err)
     } else {
@@ -223,7 +224,6 @@ db.query(`SELECT * FROM role`, (err, results) => {
 })
 }
 
-// TODO
 // WHEN I choose to update an employee role
 // THEN I am prompted to select an employee to update and their new role and this information is updated in the database 
 async function updateRole() {
@@ -259,17 +259,17 @@ async function updateRole() {
   const employeeId = roleUpdate.id;
 const newRole = roleUpdate.role;
 
-  db.query(`UPDATE employee SET title = ? WHERE id = ?`, [newRole, employeeId], (err, results) => {
+  db.query(`UPDATE employee SET role_id = ? WHERE id = ?`, [newRole, employeeId], (err, results) => {
     if (err) {
       console.log(err);
-      start();   
-}})
+}
+start();   
+})
 })
 })
 }
 
-// not sure how to do this one, AT ALL
-// same concept of addEmployee. but get role array and list of employees
+
 
 
 start();
