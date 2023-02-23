@@ -11,7 +11,7 @@ CREATE TABLE department (
 
 -- need to set id the primary key and link it to the role_id as the foreign key
 CREATE TABLE role (
-  id INT NOT NULL,
+  id INT NOT NULL AUTO_INCREMENT,
   title VARCHAR(30),
   salary DECIMAL(8,2) NOT NULL,
   department_id INT,

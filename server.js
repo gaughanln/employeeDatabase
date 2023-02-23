@@ -128,74 +128,49 @@ async function addDepartment() {
 // THEN I am prompted to enter the name, salary, and department for the role and that role is added to the database
 
 
-const role = [
-  {
-    type: "list",
-    name: "role",
-    message:
-      "What is this employee's role?",
-    choices: ["Marketing Manager", "Marketing Coordinator", "Sales Rep", "Sales lead", "Lawyer", "Accountant", "Customer Service Rep"]
-  },
-  {
-    type: "number",
-    name: "salary",
-    message:
-      "What is the salary for this role?",
-  },
-  {
-    type: "list",
-    name: "department",
-    message:
-      "What department does this employee work in?",
-    choices: ["Marketing", "Sales", "Legal", "Finance", "Customer Service"]
-  }
-]
-
 // follow what we did from addEmployee function 
 async function addRole() {
-  const newRole = await inquirer.prompt(role);
-db.query(`INSERT INTO role (title, salary, department_id) VALUES (${newRole.role}, ${newRole.salary}, ${newRole.department})`, (err, results) => {
+  db.query(`SELECT * FROM department`, async (err, departmentResults) => {
+    if (err) {
+      console.log(err)
+    }
+    let departmentArray = departmentResults.map(department => ({name: department.name, value: department.id}));
+ 
+  const newRole = await inquirer.prompt([
+      {
+        type: "Input",
+        name: "role",
+        message:
+          "What is the name of the new role?",
+       },
+      {
+        type: "number",
+        name: "salary",
+        message:
+          "What is the salary for this role?",
+      },
+      {
+        type: "list",
+        name: "department",
+        message:
+          "What department does this role belong to?",
+        choices: departmentArray
+      }
+    ]);
+    
+db.query(`INSERT INTO role (title, salary, department_id) VALUES ("${newRole.role}", "${newRole.salary}", "${newRole.department}")`, (err, results) => {
   if (err) {
     console.log(err)
   } else {
     console.log(`Added ${newRole.role} to database`);
     start();
   }})
+})
 }
 
 // WHEN I choose to add an employee
 // THEN I am prompted to enter the employee’s first name, last name, role, and manager, and that employee is added to the database
-// let roleArray = [];
-// let managerArray = [];
 
-// let employee = [
-//   {
-//     type: "input",
-//     name: "firstName",
-//     message:
-//       "What is the employees first name?",
-//   },
-//   {
-//     type: "input",
-//     name: "lastName",
-//     message:
-//       "What is the employee's last name?",
-//   },
-//   {
-//     type: "list",
-//     name: "role",
-//     message:
-//       "What is this employee's role?",
-//     choices: roleArray,
-//   },
-//   {
-//     type: "list",
-//     name: "manager",
-//     message:
-//       "Who is the employee's manager?",
-//     choices: managerArray,
-//   },
-// ]
 
 async function addEmployee() {
 db.query(`SELECT * FROM role`, (err, results) => {
@@ -207,7 +182,8 @@ db.query(`SELECT * FROM role`, (err, results) => {
     if (err) {
       console.log(err)
     } 
-    let managerArray = managerResults.map(manager => ({name: manager.first_name, value: manager.id}));
+    let managerArray = managerResults.map(manager => 
+      ({name: manager.first_name, value: manager.id}));
 
     const newEmployee = await inquirer.prompt([
       {
@@ -249,6 +225,8 @@ db.query(`SELECT * FROM role`, (err, results) => {
   })
 })
 }
+
+// TODO
 // WHEN I choose to update an employee role
 // THEN I am prompted to select an employee to update and their new role and this information is updated in the database 
 // updateRole()
