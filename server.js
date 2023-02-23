@@ -23,7 +23,7 @@ const firstPrompt = [
     name: "start",
     message:
       "What would you like to do?",
-    choices: ["View all departments", "View all roles", "View all employees", "Add a department", "Add a role", "Add an employee", "Update an employee role"]
+    choices: ["View all departments", "View all roles", "View all employees", "Add a department", "Add a role", "Add an employee", "Update an employee role", "Exit"]
   }
 ]
 
@@ -51,12 +51,11 @@ const start = async () => {
   } else if (answer.start === "Update an employee role") {
     updateRole();
 // console.log(role);
-  } else {
-    // TODO
-// need  an exit function here
+  } else if  (answer.start === "Exit") {
+    console.log("Peace out! 🤙");
+    process.exit();
   }
 }
-
 
 // WHEN I choose to view all departments
 // THEN I am presented with a formatted table showing department names and department ids
@@ -72,8 +71,6 @@ function allDepartments() {
   });
 }
 
-
-
 // WHEN I choose to view all roles
 // THEN I am presented with the job title, role id, the department that role belongs to, and the salary for that role
 
@@ -87,7 +84,6 @@ function allRoles() {
     }
   });
 }
-
 
 // WHEN I choose to view all employees
 // THEN I am presented with a formatted table showing employee data, including employee ids, first names, last names, job titles, departments, salaries, and managers that the employees report to
@@ -123,7 +119,6 @@ async function addDepartment() {
     }
   });
 }
-
 
 // WHEN I choose to add a role
 // THEN I am prompted to enter the name, salary, and department for the role and that role is added to the database
@@ -268,8 +263,5 @@ start();
 })
 })
 }
-
-
-
 
 start();
