@@ -227,15 +227,27 @@ db.query(`SELECT * FROM role`, (err, results) => {
 // WHEN I choose to update an employee role
 // THEN I am prompted to select an employee to update and their new role and this information is updated in the database 
 async function updateRole() {
-  db.query(`SELECT * FROM role`, (err, results) => {
+  db.query(`SELECT * FROM role`, async (err, res) => {
     if (err) {
       console.log(err)
     } 
     let roleArray = results.map(role => ({name: role.title, value: role.id}));
+
   db.query(`SELECT * FROM employee`, async (err, res) => {
     if (err) {
       console.log(err)
     } 
+    const employeeArray = res.map(employee => ({name: employee.first_name + ' ' + employee.last_name, value: employee.id}));
+const employeeId = await inquirer.prompt([
+  {
+    type: "list",
+    name: "id",
+    message:
+      "Which employee's role would you like to update?",
+    choices: employeeArray,
+  }
+]);
+
   const newRole = await inquirer.prompt([
     {
       type: "list",
@@ -243,11 +255,13 @@ async function updateRole() {
       message:
         "What is this employee's new role?",
       choices: roleArray,
-    },
-  ])
-  db.query(`UPDATE employee SET title = ${newRole.role}`, (err, results) => {
+    }
+  ]);
+
+  db.query(`UPDATE employee SET title = ? WHERE id = ?`, [newRole.role, employeeId.id], (err, results) => {
     if (err) {
-      console.log(err)   
+      console.log(err);
+      start();   
 }})
 })
 })
