@@ -127,8 +127,6 @@ async function addDepartment() {
 // WHEN I choose to add a role
 // THEN I am prompted to enter the name, salary, and department for the role and that role is added to the database
 
-
-// follow what we did from addEmployee function 
 async function addRole() {
   db.query(`SELECT * FROM department`, async (err, departmentResults) => {
     if (err) {
@@ -170,7 +168,6 @@ db.query(`INSERT INTO role (title, salary, department_id) VALUES ("${newRole.rol
 
 // WHEN I choose to add an employee
 // THEN I am prompted to enter the employee’s first name, last name, role, and manager, and that employee is added to the database
-
 
 async function addEmployee() {
 db.query(`SELECT * FROM role`, (err, results) => {
