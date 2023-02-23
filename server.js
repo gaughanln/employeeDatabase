@@ -238,17 +238,15 @@ async function updateRole() {
       console.log(err)
     } 
     const employeeArray = res.map(employee => ({name: employee.first_name + ' ' + employee.last_name, value: employee.id}));
-const employeeId = await inquirer.prompt([
-  {
-    type: "list",
-    name: "id",
-    message:
-      "Which employee's role would you like to update?",
-    choices: employeeArray,
-  }
-]);
 
-  const newRole = await inquirer.prompt([
+  const roleUpdate = await inquirer.prompt([
+    {
+      type: "list",
+      name: "id",
+      message:
+        "Which employee's role would you like to update?",
+      choices: employeeArray,
+    },
     {
       type: "list",
       name: "role",
@@ -258,7 +256,10 @@ const employeeId = await inquirer.prompt([
     }
   ]);
 
-  db.query(`UPDATE employee SET title = ? WHERE id = ?`, [newRole.role, employeeId.id], (err, results) => {
+  const employeeId = roleUpdate.id;
+const newRole = roleUpdate.role;
+
+  db.query(`UPDATE employee SET title = ? WHERE id = ?`, [newRole, employeeId], (err, results) => {
     if (err) {
       console.log(err);
       start();   
