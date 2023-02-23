@@ -50,7 +50,7 @@ const start = async () => {
 
   } else if (answer.start === "Update an employee role") {
     updateRole();
-console.log(role);
+// console.log(role);
   } else {
 // need either an exit here or to rerun the function
   }
@@ -231,7 +231,7 @@ async function updateRole() {
     if (err) {
       console.log(err)
     } 
-    let roleArray = results.map(role => ({name: role.title, value: role.id}));
+    let roleArray = res.map(role => ({name: role.title, value: role.id}));
 
   db.query(`SELECT * FROM employee`, async (err, res) => {
     if (err) {
