@@ -25,6 +25,8 @@ Must be able to do the following:
 <!-- Video of application in progress -->
 The following video shows an example of the application being used from the command line:
 
+https://user-images.githubusercontent.com/111533986/221227115-71ceef09-9c6c-45aa-bbc9-c370887e540a.mov
+
 <!-- screenshots -->
 Below is a screenshot of the application in use
 ![screenshot1](./assets/employeeDatabase.png)
@@ -36,4 +38,12 @@ Here is the [link](https://gaughanlnnotesaver.herokuapp.com/) to the Github repo
 ## Contributing
 Lindsey Gaughan (Me!) 
 
+<<<<<<< HEAD
 ![Lindsey Gaughan](./assets/gaughanln.png)
+=======
+![Lindsey Gaughan](./Assets/gaughanln.png)
+
+
+
+
+>>>>>>> 8a224afd502d552bb5a00d7267f29ca7612a76bc
