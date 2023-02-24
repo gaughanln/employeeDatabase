@@ -1,4 +1,4 @@
-# employeeDatabase
+# Employee Database
 
 ## Description
 This application is an employee database. You can view all employees, their position within the company, salary, manager, department, and more. If any edits need to be made, they can be done so within the command line. 
@@ -19,6 +19,8 @@ Must be able to do the following:
 * Add a role 
 * Add an employee 
 * Update an employee role 
+* Database schema that reflects the following:
+![screenshot](./assets/12-sql-homework-demo-01.png)
 
 ## End Product 
 
@@ -29,7 +31,7 @@ https://user-images.githubusercontent.com/111533986/221227115-71ceef09-9c6c-45aa
 
 <!-- screenshots -->
 Below is a screenshot of the application in use
-![screenshot1](./assets/employeeDatabase.png)
+![screenshot](./assets/employeeDatabase.png)
 
 <!-- link -->
 ## Deployment
@@ -38,12 +40,9 @@ Here is the [link](https://gaughanlnnotesaver.herokuapp.com/) to the Github repo
 ## Contributing
 Lindsey Gaughan (Me!) 
 
-<<<<<<< HEAD
 ![Lindsey Gaughan](./assets/gaughanln.png)
-=======
-![Lindsey Gaughan](./Assets/gaughanln.png)
 
 
 
 
->>>>>>> 8a224afd502d552bb5a00d7267f29ca7612a76bc
+
