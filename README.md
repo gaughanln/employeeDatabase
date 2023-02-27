@@ -35,7 +35,7 @@ Below is a screenshot of the application in use
 
 <!-- link -->
 ## Deployment
-Here is the [link](https://gaughanlnnotesaver.herokuapp.com/) to the Github repository
+Here is the [link](https://github.com/gaughanln/employeeDatabase) to the Github repository
 
 ## Contributing
 Lindsey Gaughan (Me!) 
