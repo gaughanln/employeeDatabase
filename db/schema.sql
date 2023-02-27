@@ -9,7 +9,7 @@ CREATE TABLE department (
   PRIMARY KEY (id)
 );
 
--- need to set id the primary key and link it to the role_id as the foreign key
+
 CREATE TABLE role (
   id INT NOT NULL AUTO_INCREMENT,
   title VARCHAR(30),
@@ -21,7 +21,7 @@ CREATE TABLE role (
   ON DELETE SET NULL
 );
 
--- need to link the employee id to the manager_id 
+
 CREATE TABLE employee (
   id INT NOT NULL AUTO_INCREMENT,
   first_name VARCHAR(30),
